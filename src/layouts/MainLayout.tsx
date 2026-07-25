@@ -13,7 +13,7 @@ export const MainLayout = () => {
         <Sidebar collapsed={collapsed} />
         <div className="flex min-h-screen flex-1 flex-col overflow-hidden">
           <Topbar onToggle={() => setCollapsed((value) => !value)} />
-          <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 ${sidebarWidth}`}>
+          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
             <div className="mx-auto w-full max-w-7xl">
               <Outlet />
             </div>
