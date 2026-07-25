@@ -1,28 +1,94 @@
-import { useState } from 'react'
-import { Outlet } from 'react-router-dom'
-import { Sidebar } from '../components/common/Sidebar'
-import { Topbar } from '../components/common/Topbar'
+import {
+  BarChart3,
+  Bot,
+  Building2,
+  LayoutDashboard,
+  Moon,
+  Settings,
+  ShieldCheck,
+  SunMedium,
+  UserCircle2,
+  FileText,
+  Megaphone,
+  GraduationCap,
+} from "lucide-react";
+import { NavLink } from "react-router-dom";
+import { useTheme } from "../../context/ThemeContext";
 
-export const MainLayout = () => {
-  const [collapsed, setCollapsed] = useState(false)
+const navItems = [
+  { label: "Dashboard", to: "/dashboard", icon: LayoutDashboard },
+  { label: "Schools", to: "/schools", icon: GraduationCap },
+  { label: "Competitors", to: "/competitors", icon: ShieldCheck },
+  { label: "Campaigns", to: "/campaigns", icon: Megaphone },
+  { label: "Analytics", to: "/analytics", icon: BarChart3 },
+  { label: "AI Chat", to: "/ai-chat", icon: Bot },
+  { label: "Reports", to: "/reports", icon: FileText },
+  { label: "Settings", to: "/settings", icon: Settings },
+  { label: "Profile", to: "/profile", icon: UserCircle2 },
+];
+
+interface SidebarProps {
+  collapsed: boolean;
+}
+
+export const Sidebar = ({ collapsed }: SidebarProps) => {
+  const { darkMode, toggleTheme } = useTheme();
 
   return (
-    <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.18),_transparent_32%),linear-gradient(135deg,_#f8fafc_0%,_#eef2ff_100%)] text-slate-900 transition-colors dark:bg-[radial-gradient(circle_at_top_left,_rgba(139,92,246,0.23),_transparent_28%),linear-gradient(135deg,_#020617_0%,_#111827_100%)] dark:text-slate-100">
-      <div className="flex min-h-screen">
-        {/* Sidebar */}
-        <Sidebar collapsed={collapsed} />
+    <aside
+      className={`hidden lg:flex flex-col justify-between border-r border-slate-200/70 bg-white/80 backdrop-blur dark:border-slate-800 dark:bg-slate-950/80 ${
+        collapsed ? "w-20" : "w-64"
+      } transition-all duration-300`}
+    >
+      <div>
+        <div className="flex items-center gap-3 px-5 py-6">
+          <div className="rounded-2xl bg-violet-600 p-2 text-white shadow-lg shadow-violet-500/20">
+            <Building2 size={20} />
+          </div>
 
-        {/* Main Content */}
-        <div className="flex flex-1 flex-col overflow-hidden">
-          <Topbar onToggle={() => setCollapsed((value) => !value)} />
-
-          <main className="flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8">
-            <div className="mx-auto w-full max-w-7xl">
-              <Outlet />
+          {!collapsed && (
+            <div>
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                EduIntel AI
+              </p>
+              <p className="text-xs text-slate-500 dark:text-slate-400">
+                Admissions OS
+              </p>
             </div>
-          </main>
+          )}
         </div>
+
+        <nav className="mt-2 space-y-1 px-3">
+          {navItems.map(({ label, to, icon: Icon }) => (
+            <NavLink
+              key={to}
+              to={to}
+              className={({ isActive }) =>
+                `flex items-center gap-3 rounded-2xl px-3 py-3 text-sm font-medium transition ${
+                  isActive
+                    ? "bg-violet-600 text-white shadow-lg shadow-violet-500/20"
+                    : "text-slate-600 hover:bg-slate-100 dark:text-slate-300 dark:hover:bg-slate-800"
+                }`
+              }
+            >
+              <Icon size={18} />
+              {!collapsed && <span>{label}</span>}
+            </NavLink>
+          ))}
+        </nav>
       </div>
-    </div>
-  )
-}
+
+      <div className="border-t border-slate-200 p-4 dark:border-slate-800">
+        <button
+          onClick={toggleTheme}
+          className="flex w-full items-center justify-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-600 transition hover:bg-slate-100 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-800"
+        >
+          {darkMode ? <SunMedium size={16} /> : <Moon size={16} />}
+          {!collapsed && (
+            <span>{darkMode ? "Light mode" : "Dark mode"}</span>
+          )}
+        </button>
+      </div>
+    </aside>
+  );
+};
