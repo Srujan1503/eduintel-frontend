@@ -5,8 +5,10 @@ export const useDashboardOverview = () => {
   return useQuery({
     queryKey: ['dashboard', 'overview'],
     queryFn: dashboardService.getOverview,
-    retry: 1,
+    retry: 2,
     staleTime: 30_000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }
 
@@ -14,7 +16,9 @@ export const useDashboardKpis = () => {
   return useQuery({
     queryKey: ['dashboard', 'kpis'],
     queryFn: dashboardService.getKpis,
-    retry: 1,
+    retry: 2,
     staleTime: 30_000,
+    refetchOnWindowFocus: true,
+    refetchOnReconnect: true,
   })
 }

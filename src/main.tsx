@@ -7,7 +7,17 @@ import { ThemeProvider } from './context/ThemeContext'
 import './index.css'
 import App from './App.tsx'
 
-const queryClient = new QueryClient()
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      retry: 2,
+      staleTime: 30_000,
+      gcTime: 5 * 60 * 1000,
+      refetchOnWindowFocus: true,
+      refetchOnReconnect: true,
+    },
+  },
+})
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>

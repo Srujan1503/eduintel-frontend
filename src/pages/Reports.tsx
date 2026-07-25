@@ -1,13 +1,17 @@
-import { Download, FileText, Share2 } from 'lucide-react'
+import { Download, FileText, RefreshCw, Share2 } from 'lucide-react'
 import { useState } from 'react'
 import { reportService } from '../services/report.service'
+
+type ReportType = 'pdf' | 'csv' | 'excel'
 
 export const Reports = () => {
   const [statusMessage, setStatusMessage] = useState('')
   const [isExporting, setIsExporting] = useState(false)
+  const [lastExportType, setLastExportType] = useState<ReportType | null>(null)
 
-  const handleExport = async (type: 'pdf' | 'csv' | 'excel') => {
+  const handleExport = async (type: ReportType) => {
     setIsExporting(true)
+    setLastExportType(type)
     setStatusMessage(`Preparing ${type.toUpperCase()} export…`)
 
     try {
@@ -35,8 +39,9 @@ export const Reports = () => {
             <h2 className="text-2xl font-semibold text-slate-900 dark:text-white">Board-ready insights and export packages</h2>
           </div>
           <div className="flex gap-2">
-            <button onClick={() => void handleExport('pdf')} disabled={isExporting} className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200 disabled:opacity-70"><Download size={15} /> PDF</button>
-            <button onClick={() => void handleExport('csv')} disabled={isExporting} className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200 disabled:opacity-70"><Share2 size={15} /> CSV</button>
+            <button type="button" onClick={() => void handleExport('pdf')} disabled={isExporting} className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200 disabled:opacity-70"><Download size={15} /> PDF</button>
+            <button type="button" onClick={() => void handleExport('csv')} disabled={isExporting} className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200 disabled:opacity-70"><Share2 size={15} /> CSV</button>
+            <button type="button" onClick={() => void handleExport('excel')} disabled={isExporting} className="flex items-center gap-2 rounded-2xl border border-slate-200 px-3 py-2 text-sm font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200 disabled:opacity-70"><Download size={15} /> Excel</button>
           </div>
         </div>
       </div>
@@ -54,19 +59,32 @@ export const Reports = () => {
         <div className="rounded-[28px] border border-slate-200/70 bg-white/80 p-6 shadow-sm backdrop-blur dark:border-slate-800 dark:bg-slate-950/80">
           <h3 className="text-lg font-semibold text-slate-900 dark:text-white">Export package</h3>
           <div className="mt-4 space-y-3">
-            {['Board deck', 'Campaign performance', 'Competitor brief', 'Parent sentiment summary'].map((item) => (
-              <div key={item} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900">
-                <span>{item}</span>
-                <button onClick={() => void handleExport(item.includes('Campaign') ? 'csv' : item.includes('Competitor') ? 'excel' : 'pdf')} className="text-violet-600">Export</button>
-              </div>
-            ))}
+            {['Board deck', 'Campaign performance', 'Competitor brief', 'Parent sentiment summary'].map((item, index) => {
+              const exportType = index === 1 ? 'csv' : index === 2 ? 'excel' : 'pdf'
+              return (
+                <div key={item} className="flex items-center justify-between rounded-2xl border border-slate-200 bg-slate-50 px-4 py-3 text-sm dark:border-slate-800 dark:bg-slate-900">
+                  <span>{item}</span>
+                  <button type="button" onClick={() => void handleExport(exportType)} disabled={isExporting} className="flex items-center gap-2 text-violet-600 disabled:opacity-70">
+                    {isExporting ? <RefreshCw size={14} className="animate-spin" /> : <Download size={14} />}
+                    Export
+                  </button>
+                </div>
+              )
+            })}
           </div>
         </div>
       </div>
 
       {statusMessage ? (
-        <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-300">
-          {statusMessage}
+        <div className="rounded-2xl border border-slate-200 bg-white/80 px-4 py-3 text-sm text-slate-600 dark:border-slate-800 dark:bg-slate-950/70 dark:text-slate-300" role="status" aria-live="polite">
+          <div className="flex flex-wrap items-center justify-between gap-3">
+            <span>{statusMessage}</span>
+            {lastExportType && !isExporting ? (
+              <button type="button" onClick={() => void handleExport(lastExportType)} className="inline-flex items-center gap-2 rounded-xl border border-slate-200 px-3 py-2 font-semibold text-slate-700 dark:border-slate-700 dark:text-slate-200">
+                <RefreshCw size={14} /> Retry
+              </button>
+            ) : null}
+          </div>
         </div>
       ) : null}
     </div>

@@ -11,10 +11,12 @@ export const MainLayout = () => {
     <div className="min-h-screen bg-[radial-gradient(circle_at_top_left,_rgba(167,139,250,0.18),_transparent_32%),linear-gradient(135deg,_#f8fafc_0%,_#eef2ff_100%)] text-slate-900 transition-colors dark:bg-[radial-gradient(circle_at_top_left,_rgba(139,92,246,0.23),_transparent_28%),linear-gradient(135deg,_#020617_0%,_#111827_100%)] dark:text-slate-100">
       <div className="flex min-h-screen">
         <Sidebar collapsed={collapsed} />
-        <div className="flex min-h-screen flex-1 flex-col">
+        <div className="flex min-h-screen flex-1 flex-col overflow-hidden">
           <Topbar onToggle={() => setCollapsed((value) => !value)} />
-          <main className={`flex-1 p-4 sm:p-6 lg:p-8 ${sidebarWidth}`}>
-            <Outlet />
+          <main className={`flex-1 overflow-y-auto p-4 sm:p-6 lg:p-8 ${sidebarWidth}`}>
+            <div className="mx-auto w-full max-w-7xl">
+              <Outlet />
+            </div>
           </main>
         </div>
       </div>

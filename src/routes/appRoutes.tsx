@@ -7,6 +7,7 @@ import { PublicRoute } from './PublicRoute'
 const Landing = lazy(() => import('../pages/Landing').then((module) => ({ default: module.Landing })))
 const Login = lazy(() => import('../pages/Login').then((module) => ({ default: module.Login })))
 const ForgotPassword = lazy(() => import('../pages/ForgotPassword').then((module) => ({ default: module.ForgotPassword })))
+const ResetPassword = lazy(() => import('../pages/ResetPassword').then((module) => ({ default: module.ResetPassword })))
 const Dashboard = lazy(() => import('../pages/Dashboard').then((module) => ({ default: module.Dashboard })))
 const Schools = lazy(() => import('../pages/Schools').then((module) => ({ default: module.Schools })))
 const Competitors = lazy(() => import('../pages/Competitors').then((module) => ({ default: module.Competitors })))
@@ -34,6 +35,7 @@ export const AppRoutes = () => (
         <Route path="/" element={<Landing />} />
         <Route path="/login" element={<Login />} />
         <Route path="/forgot-password" element={<ForgotPassword />} />
+        <Route path="/reset-password" element={<ResetPassword />} />
       </Route>
 
       <Route element={<ProtectedRoute />}>

@@ -33,6 +33,7 @@ export const SchoolTable = ({ schools, sortKey, sortDirection, onSort, onEdit, o
 
   return (
     <div className="overflow-hidden rounded-2xl border border-slate-200 dark:border-slate-800">
+      <div className="overflow-x-auto">
       <table className="min-w-full divide-y divide-slate-200 text-left dark:divide-slate-800">
         <thead className="bg-slate-50 text-sm text-slate-600 dark:bg-slate-900 dark:text-slate-300">
           <tr>
@@ -68,6 +69,7 @@ export const SchoolTable = ({ schools, sortKey, sortDirection, onSort, onEdit, o
           ))}
         </tbody>
       </table>
+      </div>
     </div>
   )
 }
