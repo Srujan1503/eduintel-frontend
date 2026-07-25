@@ -1,75 +1,26 @@
-# React + TypeScript + Vite
+# EduIntel AI Frontend
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+A Vite + React + TypeScript dashboard for EduIntel AI, ready for deployment with Vercel, Supabase, and a FastAPI backend on Railway.
 
-Currently, two official plugins are available:
+## Environment variables
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react) uses [Oxc](https://oxc.rs)
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react-swc) uses [SWC](https://swc.rs/)
+Set these in Vercel:
 
-## React Compiler
+- VITE_API_BASE_URL: your Railway backend URL, for example https://your-backend.railway.app
+- VITE_API_URL: same value plus /api/v1, for example https://your-backend.railway.app/api/v1
+- VITE_SUPABASE_URL: your Supabase project URL
+- VITE_SUPABASE_ANON_KEY: your Supabase anon key
 
-The React Compiler is not enabled on this template because of its impact on dev & build performances. To add it, see [this documentation](https://react.dev/learn/react-compiler/installation).
+## Deployment steps
 
-## Expanding the ESLint configuration
+1. Build the app locally:
+   npm run build
+2. Deploy the frontend to Vercel from this repository.
+3. Configure the environment variables above in Vercel.
+4. Ensure the backend is running on Railway and exposes the same API prefix.
+5. In Supabase Auth, add your Vercel domain to the allowed redirect URLs.
 
-If you are developing a production application, we recommend updating the configuration to enable type-aware lint rules:
+## Notes
 
-```js
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-
-      // Remove tseslint.configs.recommended and replace with this
-      tseslint.configs.recommendedTypeChecked,
-      // Alternatively, use this for stricter rules
-      tseslint.configs.strictTypeChecked,
-      // Optionally, add this for stylistic rules
-      tseslint.configs.stylisticTypeChecked,
-
-      // Other configs...
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
-
-You can also install [eslint-plugin-react-x](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-x) and [eslint-plugin-react-dom](https://github.com/Rel1cx/eslint-react/tree/main/packages/plugins/eslint-plugin-react-dom) for React-specific lint rules:
-
-```js
-// eslint.config.js
-import reactX from 'eslint-plugin-react-x'
-import reactDom from 'eslint-plugin-react-dom'
-
-export default defineConfig([
-  globalIgnores(['dist']),
-  {
-    files: ['**/*.{ts,tsx}'],
-    extends: [
-      // Other configs...
-      // Enable lint rules for React
-      reactX.configs['recommended-typescript'],
-      // Enable lint rules for React DOM
-      reactDom.configs.recommended,
-    ],
-    languageOptions: {
-      parserOptions: {
-        project: ['./tsconfig.node.json', './tsconfig.app.json'],
-        tsconfigRootDir: import.meta.dirname,
-      },
-      // other options...
-    },
-  },
-])
-
-```
+- The app uses SPA rewrites via vercel.json so deep links work correctly.
+- The API client automatically attaches the Supabase access token when available.
